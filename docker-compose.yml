@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    command: uvicorn scalable_ecommerce_backend:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY}
+      DATABASE_URL: postgresql://postgres:Vinaypatil808480@db.ehtlochotvjalsgxglrp.supabase.co:5432/postgres
+      REDIS_URL: redis://redis:6379/0
+      CACHE_TTL: 60
+    depends_on:
+      - redis
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    # no more sysctls or extra_hosts needed once the network supports IPv6
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+
+# Define a custom network with IPv6 enabled
+networks:
+  default:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16     # IPv4 range for the network
+        - subnet: 2001:db8:1::/64   # IPv6 range (an RFC-1918-style placeholder; Docker uses it internally)
