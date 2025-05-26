@@ -3,6 +3,12 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
+import sys
+from pathlib import Path
+import types
+import tables
+
 
 
 
