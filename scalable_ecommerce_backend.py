@@ -8,6 +8,7 @@ from fastapi import (
     BackgroundTasks,
     status,
 )
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi_pagination import Page, add_pagination, paginate
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, EmailStr
@@ -31,6 +32,8 @@ from jose import JWTError, jwt
 import os, json, shutil, uuid
 from datetime import datetime, timedelta
 import os
+
+# app = FastAPI(...)
 
 TESTING = os.getenv("TESTING") == "1"
 
@@ -348,7 +351,13 @@ def require_admin(current_user: UserModel = Depends(get_current_user)):
 # FastAPI app init
 app = FastAPI(title="Scalable E-Commerce Backend")
 
-
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=["http://localhost:5173"],
+  allow_credentials=True,
+  allow_methods=["*"],
+  allow_headers=["*"],
+)
 # --- AUTH & USER ENDPOINTS ---
 @app.post("/token", response_model=Token)
 def login_for_access_token(
