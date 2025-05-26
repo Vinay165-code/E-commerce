@@ -9,9 +9,6 @@ from pathlib import Path
 import types
 import tables
 
-
-
-
 os.environ["TESTING"] = "1"
 # Monkey-patch fastapi_pagination modules to bypass broken package import
 class DummyPage:
